@@ -6,13 +6,13 @@ screen = pygame.display.set_mode((800, 600))
 
 pygame.display.set_caption("Pimpin ain't easy")
 
-playerImg = pygame.image.load('player.png')
+playerImg = pygame.image.load('space.png')
 playerX = 370
 playerY = 480
 
 
 def player():
-    pass
+    screen.blit(playerImg, (playerX, playerY))
 
 
 def draw_window(screen):
@@ -21,9 +21,12 @@ def draw_window(screen):
 
 run = True
 while run:
+
+    screen.fill((0, 0, 0))
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
 
-    screen.fill((0, 0, 0))
+    player()
     pygame.display.update()
