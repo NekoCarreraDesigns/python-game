@@ -4,13 +4,19 @@ pygame.init()
 
 screen = pygame.display.set_mode((800, 600))
 
+pygame.display.set_caption("Pimpin ain't easy")
 
-def draw_window(surface, screen):
-    pygame.font.init()
-    font = pygame.font.SysFont('comicsans', 60)
-    label = font.render(
-        "Pimpin ain't easy, press any key to begin", 60, (255, 255, 255))
-    surface.blit(label)
+playerImg = pygame.image.load('player.png')
+playerX = 370
+playerY = 480
+
+
+def player():
+    pass
+
+
+def draw_window(screen):
+    pass
 
 
 run = True
@@ -19,5 +25,5 @@ while run:
         if event.type == pygame.QUIT:
             run = False
 
-
-draw_window(screen)
+    screen.fill((0, 0, 0))
+    pygame.display.update()
