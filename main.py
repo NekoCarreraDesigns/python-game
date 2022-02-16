@@ -29,7 +29,6 @@ enemyY = random.randint(50, 150)
 enemyX_change = 0.3
 enemyY_change = 40
 
-
 # extra enemies to add later, potentially need their own functions
 # enemyImg1 = pygame.image.load('alien-ship.png')
 # enemy1X = random.randint(0, 800)
@@ -43,6 +42,13 @@ enemyY_change = 40
 # enemy2X_change = 0.3
 # enenmy2Y_change = 40
 
+missileImg = pygame.image.load('missile.png')
+missileX = 0
+missileY = 480
+missileX_change = 0
+missileY_change = 10
+missile_state = "ready"
+
 # player function to diplay player
 
 
@@ -55,9 +61,14 @@ def player(x, y):
 def enemy(x, y):
     screen.blit(enemyImg, (x, y))
 
+
+def fire_missile(x, y):
+    global missile_state
+    missile_state = "fire"
+    screen.blit(missileImg, (x + 16, y + 10))
+
+
 # function to create game window
-
-
 def draw_window(screen):
     pass
 
@@ -79,6 +90,8 @@ while run:
                 playerX_change = -0.5
             if event.key == pygame.K_RIGHT:
                 playerX_change = 0.5
+            if event.key == pygame.K_SPACE:
+                fire_missile(playerX, missileY)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 playerX_change = 0
@@ -98,6 +111,10 @@ while run:
     elif enemyX >= 736:
         enemyX_change = -0.3
         enemyY += enemyY_change
+    # missile movement
+    if missile_state == "fire":
+        fire_missile(playerX, missileY)
+        missileY -= missileY_change
 
     player(playerX, playerY)
     enemy(enemyX, enemyY)
