@@ -13,9 +13,18 @@ playerX = 370
 playerY = 480
 playerX_change = 0
 
+enemyImg = pygame.image.load('alien-one.png')
+enemyX = 370
+enemyY = 480
+enemyX_change = 0
+
 
 def player(x, y):
     screen.blit(playerImg, (x, y))
+
+
+def enemy(x, y):
+    screen.blit(enemyImg, (x, y))
 
 
 def draw_window(screen):
@@ -48,4 +57,5 @@ while run:
         playerX = 736
 
     player(playerX, playerY)
+    enemy(enemyX, enemyY)
     pygame.display.update()
