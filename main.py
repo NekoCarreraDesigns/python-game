@@ -5,6 +5,8 @@ pygame.init()
 screen = pygame.display.set_mode((800, 600))
 
 pygame.display.set_caption("Pimpin ain't easy")
+captionImg = pygame.image.load('space-ship.png')
+pygame.display.set_caption(captionImg)
 
 playerImg = pygame.image.load('space.png')
 playerX = 370
