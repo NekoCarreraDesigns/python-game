@@ -8,7 +8,10 @@ pygame.init()
 # global screen variable
 screen = pygame.display.set_mode((800, 600))
 
-# caption and title for game
+# background image for game
+background = pygame.image.load('space-background.jpg')
+
+# caption and icon for game
 pygame.display.set_caption("Pimpin ain't easy")
 captionImg = pygame.image.load('space-ship.png')
 pygame.display.set_icon(captionImg)
@@ -64,6 +67,8 @@ run = True
 while run:
 
     screen.fill((0, 0, 0))
+    # Background image
+    screen.blit(background, (0, 0))
 # player in game functions, movement and exit, as well as function calls
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
