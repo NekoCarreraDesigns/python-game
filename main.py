@@ -2,6 +2,7 @@
 import pygame
 import random
 import math
+from pygame import mixer
 # pygame initialize
 pygame.init()
 
@@ -10,6 +11,11 @@ screen = pygame.display.set_mode((800, 600))
 
 # background image for game
 background = pygame.image.load('space-background.jpg')
+
+
+# background sound
+mixer.music.load('background.wav')
+mixer.music.play(-15)
 
 # caption and icon for game
 pygame.display.set_caption("Pimpin ain't easy")
@@ -58,6 +64,7 @@ missileY_change = 10
 missile_state = "ready"
 # score
 score_value = 0
+over_font = pygame.font.Font('freesansbold.ttf', 32)
 font = pygame.font.Font('freesansbold.ttf', 32)
 
 textX = 10
@@ -67,6 +74,12 @@ textY = 10
 def show_score(x, y):
     score = font.render("Score: " + str(score_value), True, (153, 13, 55))
     screen.blit(score, (x, y))
+
+
+def game_over_text():
+    over_text = over_font.render(
+        "GAME OVER", True, (153, 13, 55))
+    screen.blit(over_text, (300, 200))
 
 
 # player function to diplay player
@@ -114,6 +127,8 @@ while run:
                 playerX_change = 0.5
             if event.key == pygame.K_SPACE:
                 if missile_state == "ready":
+                    missile_sound = mixer.Sound('laser.wav')
+                    missile_sound.play()
                     missileX = playerX
                     fire_missile(playerX, missileY)
         if event.type == pygame.KEYUP:
@@ -127,8 +142,14 @@ while run:
     elif playerX >= 736:
         playerX = 736
     # enemy boundary check, making sure enemies stay in bounds
-    enemyX += enemyX_change
+
     for i in range(num_of_enemies):
+        if enemyY[i] > 440:
+            for j in range(num_of_enemies):
+                enemyY[j] = 2000
+            game_over_text()
+            break
+
         enemyX[i] += enemyX_change[i]
         if enemyX[i] <= 0:
             enemyX_change[i] = 2
@@ -140,6 +161,8 @@ while run:
         # collision detection
         collision = isCollision(enemyX[i], enemyY[i], missileX, missileY)
         if collision:
+            explosion_sound = mixer.Sound('explosion.wav')
+            explosion_sound.play()
             missileY = 480
             missile_state = 'ready'
             score_value += 1
