@@ -112,6 +112,9 @@ while run:
         enemyX_change = -0.3
         enemyY += enemyY_change
     # missile movement
+    if missileY <= 0:
+        missileY = 480
+        missile_state = "ready"
     if missile_state == "fire":
         fire_missile(playerX, missileY)
         missileY -= missileY_change
