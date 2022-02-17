@@ -23,11 +23,19 @@ playerY = 480
 playerX_change = 0
 
 # Enemy image
-enemyImg = pygame.image.load('alien-one.png')
-enemyX = random.randint(0, 736)
-enemyY = random.randint(50, 150)
-enemyX_change = 0.3
-enemyY_change = 40
+enemyImg = []
+enemyX = []
+enemyY = []
+enemyX_change = []
+enemyY_change = []
+num_of_enemies = 6
+
+for i in range(num_of_enemies):
+    enemyImg.append(pygame.image.load('alien-one.png'))
+    enemyX.append(random.randint(0, 736))
+    enemyY.append(random.randint(50, 150))
+    enemyX_change.append(0.3)
+    enemyY_change.append(40)
 
 # extra enemies to add later, potentially need their own functions
 # enemyImg1 = pygame.image.load('alien-ship.png')
@@ -48,30 +56,34 @@ missileY = 480
 missileX_change = 0
 missileY_change = 10
 missile_state = "ready"
+# score
+score_value = 0
+font = pygame.font.Font('freesansbold.ttf', 32)
 
-score = 0
+textX = 10
+textY = 10
+
+
+def show_score(x, y):
+    score = font.render("Score: " + str(score_value), True, (153, 13, 55))
+    screen.blit(score, (x, y))
+
+
 # player function to diplay player
-
-
 def player(x, y):
     screen.blit(playerImg, (x, y))
 
 # enemy function to display enemy
 
 
-def enemy(x, y):
-    screen.blit(enemyImg, (x, y))
+def enemy(x, y, i):
+    screen.blit(enemyImg[i], (x, y))
 
 
 def fire_missile(x, y):
     global missile_state
     missile_state = "fire"
     screen.blit(missileImg, (x + 16, y + 10))
-
-
-# function to create game window
-def draw_window(screen):
-    pass
 
 
 def isCollision(enemyX, enemyY, missileX, missileY):
@@ -116,13 +128,25 @@ while run:
         playerX = 736
     # enemy boundary check, making sure enemies stay in bounds
     enemyX += enemyX_change
+    for i in range(num_of_enemies):
+        enemyX[i] += enemyX_change[i]
+        if enemyX[i] <= 0:
+            enemyX_change[i] = 2
+            enemyY[i] += enemyY_change[i]
+        elif enemyX[i] >= 736:
+            enemyX_change[i] = -2
+            enemyY[i] += enemyY_change[i]
 
-    if enemyX <= 0:
-        enemyX_change = 0.8
-        enemyY += enemyY_change
-    elif enemyX >= 736:
-        enemyX_change = -0.8
-        enemyY += enemyY_change
+        # collision detection
+        collision = isCollision(enemyX[i], enemyY[i], missileX, missileY)
+        if collision:
+            missileY = 480
+            missile_state = 'ready'
+            score_value += 1
+            enemyX[i] = random.randint(0, 736)
+            enemyY[i] = random.randint(50, 150)
+
+        enemy(enemyX[i], enemyY[i], i)
     # missile movement
     if missileY <= 0:
         missileY = 480
@@ -130,16 +154,7 @@ while run:
     if missile_state == "fire":
         fire_missile(missileX, missileY)
         missileY -= missileY_change
-    # collision detection
-    collision = isCollision(enemyX, enemyY, missileX, missileY)
-    if collision:
-        missileY = 480
-        missile_state = 'ready'
-        score += 1
-        print(score)
-        enemyX = random.randint(0, 736)
-        enemyY = random.randint(50, 150)
 
     player(playerX, playerY)
-    enemy(enemyX, enemyY)
+    show_score(textX, textY)
     pygame.display.update()
