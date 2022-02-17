@@ -122,9 +122,9 @@ while run:
 
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                playerX_change = -0.5
+                playerX_change = -1
             if event.key == pygame.K_RIGHT:
-                playerX_change = 0.5
+                playerX_change = 1
             if event.key == pygame.K_SPACE:
                 if missile_state == "ready":
                     missile_sound = mixer.Sound('laser.wav')
