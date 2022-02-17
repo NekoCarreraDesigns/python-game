@@ -1,7 +1,7 @@
 # import modules
 import pygame
 import random
-
+import math
 # pygame initialize
 pygame.init()
 
@@ -24,7 +24,7 @@ playerX_change = 0
 
 # Enemy image
 enemyImg = pygame.image.load('alien-one.png')
-enemyX = random.randint(0, 800)
+enemyX = random.randint(0, 736)
 enemyY = random.randint(50, 150)
 enemyX_change = 0.3
 enemyY_change = 40
@@ -49,6 +49,7 @@ missileX_change = 0
 missileY_change = 10
 missile_state = "ready"
 
+score = 0
 # player function to diplay player
 
 
@@ -73,6 +74,15 @@ def draw_window(screen):
     pass
 
 
+def isCollision(enemyX, enemyY, missileX, missileY):
+    distance = math.sqrt((math.pow(enemyX - missileX, 2)) +
+                         (math.pow(enemyY - missileY, 2)))
+    if distance < 27:
+        return True
+    else:
+        return False
+
+
 # game loop
 run = True
 while run:
@@ -91,7 +101,9 @@ while run:
             if event.key == pygame.K_RIGHT:
                 playerX_change = 0.5
             if event.key == pygame.K_SPACE:
-                fire_missile(playerX, missileY)
+                if missile_state == "ready":
+                    missileX = playerX
+                    fire_missile(playerX, missileY)
         if event.type == pygame.KEYUP:
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                 playerX_change = 0
@@ -106,18 +118,27 @@ while run:
     enemyX += enemyX_change
 
     if enemyX <= 0:
-        enemyX_change = 0.3
+        enemyX_change = 0.8
         enemyY += enemyY_change
     elif enemyX >= 736:
-        enemyX_change = -0.3
+        enemyX_change = -0.8
         enemyY += enemyY_change
     # missile movement
     if missileY <= 0:
         missileY = 480
         missile_state = "ready"
     if missile_state == "fire":
-        fire_missile(playerX, missileY)
+        fire_missile(missileX, missileY)
         missileY -= missileY_change
+    # collision detection
+    collision = isCollision(enemyX, enemyY, missileX, missileY)
+    if collision:
+        missileY = 480
+        missile_state = 'ready'
+        score += 1
+        print(score)
+        enemyX = random.randint(0, 736)
+        enemyY = random.randint(50, 150)
 
     player(playerX, playerY)
     enemy(enemyX, enemyY)
