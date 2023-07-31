@@ -18,7 +18,7 @@ mixer.music.load('background.wav')
 mixer.music.play(-15)
 
 # caption and icon for game
-pygame.display.set_caption("Pimpin ain't easy")
+pygame.display.set_caption("Space Blaster")
 captionImg = pygame.image.load('space-ship.png')
 pygame.display.set_icon(captionImg)
 
